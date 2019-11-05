@@ -2,11 +2,24 @@
 import os.path
 import sys
 
+def get_script_type(first_line):
+    """
+    Work out if we are dealing with a class or function script
+    """
+    is_class = True
+    if "function" in first_line:
+        is_class = False
+    return is_class
+
+
 def handle_file(lines, filename):
     """
     The hard part
     """
-    # Check if class or function
+
+    # Check if class or function by inspecting first line in script
+    first_line = lines[0]
+    is_class = get_script_type(first_line)
 
 def display_usage():
     print "Error: Expecting path of the file which will be templated"
