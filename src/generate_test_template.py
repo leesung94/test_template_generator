@@ -2,12 +2,11 @@
 import os.path
 import sys
 
-def handle_file(filehandle, filename):
+def handle_file(lines, filename):
     """
     The hard part
     """
     # Check if class or function
-    
 
 def display_usage():
     print "Error: Expecting path of the file which will be templated"
@@ -28,11 +27,11 @@ def openfile(fileloc):
     Open a file handle if the file exists, returns None otherwise
     """
     filehandle = None
-
+    filename = None
     if os.path.isfile(fileloc):
         filehandle = open(fileloc, "r")
-        filename = os.path.basename(your_path)
-    return filehandle
+        filename = os.path.basename(fileloc)
+    return [filehandle, filename]
 
 def closefile(filehandle):
     """
@@ -41,11 +40,11 @@ def closefile(filehandle):
     filehandle.close()
 
 def main():
-    [fileloc, filename] = handle_args()
+    fileloc = handle_args()
     if fileloc == None:
         display_usage()
     else:
-        filehandle = openfile(fileloc)
+        [filehandle, filename] = openfile(fileloc)
         lines = filehandle.readlines()
         closefile(filehandle)
         handle_file(lines, filename)
