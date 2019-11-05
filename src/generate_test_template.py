@@ -19,9 +19,22 @@ def handle_file(lines, filename):
     The hard part
     """
 
+    # WRITE THIS IN A SEPERATE SCRIPT
+
+    # Open file to write
+
+    # Generate first part
+    #   classdef - generate class name based on filename
+    #   setup, class teardown, method teardown
+
     # Check if class or function by inspecting first line in script
     first_line = lines[0]
     is_class = get_script_type(first_line)
+
+    # Search lines for function declarations
+    #   function templates - one per function
+
+    # End file
 
 def display_usage():
     print "Error: Expecting path of the file which will be templated"
