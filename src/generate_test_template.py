@@ -6,9 +6,11 @@ def get_script_type(first_line):
     """
     Work out if we are dealing with a class or function script
     """
-    is_class = True
+    is_class = None
     if "function" in first_line:
         is_class = False
+    if "classdef" in first_line:
+        is_class = True
     return is_class
 
 

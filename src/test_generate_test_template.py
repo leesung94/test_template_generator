@@ -14,5 +14,10 @@ class TemplateGeneration(unittest.TestCase):
         is_class = generate_test_template.get_script_type(line)
         self.assertFalse(is_class)
 
+    def test_get_no_script_type(self):
+        line = "Some random text"
+        is_class = generate_test_template.get_script_type(line)
+        self.assertEquals(is_class, None)
+
 if __name__ == '__main__':
     unittest.main()
