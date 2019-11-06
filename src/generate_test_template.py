@@ -6,18 +6,6 @@ import sys
 # User Defined
 import script_generator as sg
 
-def get_script_type(first_line):
-    """
-    Work out if we are dealing with a class or function script
-    """
-    is_class = None
-    if "function" in first_line:
-        is_class = False
-    if "classdef" in first_line:
-        is_class = True
-    return is_class
-
-
 def handle_file(fileloc):
     """
     The hard part
@@ -34,8 +22,7 @@ def handle_file(fileloc):
         inst_cont_extr.close_file()
 
         # Check if class or function by inspecting first line in script
-        first_line = inst_cont_extr.get_first_line()
-        is_class = get_script_type(first_line)
+        is_class = inst_cont_extr.get_script_type()
 
         # Generate Start of test script
 
@@ -62,24 +49,6 @@ def handle_args():
     if len(sys.argv) == 2:
         fileloc = sys.argv[1]
     return fileloc
-
-
-def openfile(fileloc):
-    """
-    Open a file handle if the file exists, returns None otherwise
-    """
-    filehandle = None
-    filename = None
-    if os.path.isfile(fileloc):
-        filehandle = open(fileloc, "r")
-        filename = os.path.basename(fileloc)
-    return [filehandle, filename]
-
-def closefile(filehandle):
-    """
-    Gotta remember to close the file handle
-    """
-    filehandle.close()
 
 def main():
     fileloc = handle_args()

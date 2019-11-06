@@ -33,6 +33,17 @@ class Contents_Extractor:
         # Gets all lines in the string array which contain the word "function"
         matching = [line for line in modified_list if "function" in line]
 
+    def get_script_type(self):
+        """
+        Work out if we are dealing with a class or function script
+        """
+        first_line = self.get_first_line()
+        is_class = None
+        if "function" in first_line:
+            is_class = False
+        if "classdef" in first_line:
+            is_class = True
+        return is_class
 
 class Script_Generator:
 
