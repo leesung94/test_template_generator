@@ -1,5 +1,12 @@
 #!/usr/bin/python
+
+# Author:
+#   Lee Sung
+
+# Libraries
 import unittest
+
+# User Defined
 import script_generator as sg
 
 class ContentExtractor(unittest.TestCase):

@@ -1,4 +1,8 @@
 #!/usr/bin/python
+
+# Author:
+#   Lee Sung
+
 import os.path
 
 class Contents_Extractor:
@@ -40,6 +44,7 @@ class Contents_Extractor:
         a substring 
         """
         idx = None
+        # More Witchcraft TM
         element = next((s for s in self.contents if substring in s), None)
         # If we get an element then find its index
         if element != None:

@@ -1,5 +1,8 @@
 #!/usr/bin/python
 
+# Author:
+#   Lee Sung
+
 # Libraries
 import sys
 
