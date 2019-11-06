@@ -129,9 +129,3 @@ class Script_Generator:
             file_handle = open(self.fileloc, "w+") 
             file_handle.write(self.file_contents)
             file_handle.close()
-
-
-    
-
-
-
