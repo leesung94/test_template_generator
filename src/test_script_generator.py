@@ -68,13 +68,13 @@ class ContentExtractor(unittest.TestCase):
     def test_class_func_count(self):
         inst = self.create_basic_inst("../test/class.m")
         inst.get_script_type()
-        result = inst.get_function_lines()
+        result = inst.get_function_names()
         self.assertEqual(len(result), 2)
 
     def test_func_func_count(self):
         inst = self.create_basic_inst("../test/func1.m")
         inst.get_script_type()
-        result = inst.get_function_lines()
+        result = inst.get_function_names()
         self.assertEqual(len(result), 1)
 
 class ScriptGenerator(unittest.TestCase):

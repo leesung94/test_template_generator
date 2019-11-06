@@ -34,6 +34,7 @@ class Contents_Extractor:
     def get_function_names(self):
         # Exclude first line incase the script is a function script
         modified_list = self.contents[self.first_line:]
+        self.function_names = []
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
         function_lines = [line for line in modified_list if "function" in line]
@@ -49,6 +50,7 @@ class Contents_Extractor:
             else:
                 secondpass = firstpass.split("function ")[1]
             self.function_names.append(secondpass)
+        return self.function_names
 
     def match_first_item_in_contents(self, substring):
         """
