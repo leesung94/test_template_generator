@@ -9,6 +9,7 @@ class Contents_Extractor:
         self.filehandle = None
         self.directory = None
         self.is_class = None
+        self.function_lines = []
 
     def open_file(self):
         if os.path.isfile(self.fileloc):
@@ -32,7 +33,8 @@ class Contents_Extractor:
         modified_list = self.contents[1:]
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
-        matching = [line for line in modified_list if "function" in line]
+        self.function_lines = [line for line in modified_list if "function" in line]
+        return self.function_lines
 
     def get_script_type(self):
         """
