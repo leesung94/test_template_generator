@@ -3,10 +3,10 @@ classdef BasicClass
       Value {mustBeNumeric}
    end
    methods
-      function r = roundOff(obj)
+      function rone = roundOff(obj)
          r = round([obj.Value],2);
       end
-      function r = multiplyBy(obj,n)
+      function rtwo = multiplyBy(obj,n)
          r = [obj.Value] * n;
       end
    end
