@@ -1,6 +1,10 @@
 #!/usr/bin/python
-import os.path
+
+# Libraries
 import sys
+
+# User Defined
+import script_generator as sg
 
 def get_script_type(first_line):
     """
@@ -14,27 +18,37 @@ def get_script_type(first_line):
     return is_class
 
 
-def handle_file(lines, filename):
+def handle_file(fileloc):
     """
     The hard part
     """
 
-    # WRITE THIS IN A SEPERATE SCRIPT
+    # Get details and contents of the file
+    inst_cont_extr = sg.Contents_Extractor(fileloc)
 
-    # Open file to write
+    # Check we opened the file
+    if inst_cont_extr.open_file() == 0:
 
-    # Generate first part
-    #   classdef - generate class name based on filename
-    #   setup, class teardown, method teardown
+        # Read contents then close file
+        inst_cont_extr.read_contents()
+        inst_cont_extr.close_file()
 
-    # Check if class or function by inspecting first line in script
-    first_line = lines[0]
-    is_class = get_script_type(first_line)
+        # Check if class or function by inspecting first line in script
+        first_line = inst_cont_extr.get_first_line()
+        is_class = get_script_type(first_line)
 
-    # Search lines for function declarations
-    #   function templates - one per function
+        # Generate Start of test script
 
-    # End file
+        # Search contents for function declarations
+        #   function templates - one per function
+
+        # Generate end of file
+
+        # Create test template in same directory as content script
+
+        # Write and close
+    else:
+        return 1
 
 def display_usage():
     print "Error: Expecting path of the file which will be templated"
@@ -72,10 +86,7 @@ def main():
     if fileloc == None:
         display_usage()
     else:
-        [filehandle, filename] = openfile(fileloc)
-        lines = filehandle.readlines()
-        closefile(filehandle)
-        handle_file(lines, filename)
+        handle_file(fileloc)
     return 0
 
 if __name__ == "__main__":
