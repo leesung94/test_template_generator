@@ -25,9 +25,18 @@ def handle_file(fileloc):
         inst_cont_extr.close_file()
 
         # Check if class or function by inspecting first line in script
-        is_class = inst_cont_extr.get_script_type()
+        inst_cont_extr.get_script_type()
+
+        # Get all function declarations except first declaration if script is a 
+        # function and not a class
+        inst_cont_extr.get_function_lines()
 
         # Generate Start of test script
+        inst_scri_gene = sg.Script_Generator(
+            inst_cont_extr.filename, 
+            inst_cont_extr.directory)
+            
+        inst_scri_gene.generate_file_head()
 
         # Search contents for function declarations
         #   function templates - one per function

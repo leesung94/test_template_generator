@@ -68,12 +68,17 @@ class Contents_Extractor:
 
 class Script_Generator:
 
-    def __init__(self, lines, filename):
-        self.lines = lines
+    def __init__(self, filename, parent_dir):
         self.filename = "TEST_" + filename
+        self.file_contents = []
+        self.parent_dir = parent_dir
 
-    def get_filename(self):
-        print "Filename is : " + self.filename
+    def generate_file_head(self):
+        self.file_contents.append("classdef (TestTags = {''}) " + self.filename + " < matlab.unittest.TestCase")
+        self.file_contents.append("\n\n\n")
+        print self.file_contents
+
+    
 
 
 

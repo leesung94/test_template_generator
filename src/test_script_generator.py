@@ -80,12 +80,12 @@ class ContentExtractor(unittest.TestCase):
 class ScriptGenerator(unittest.TestCase):
 
     def test_create_object(self):
-        inst = sg.Script_Generator("hello","world")
+        inst = sg.Script_Generator("hello",".")
         self.assertIsInstance(inst, sg.Script_Generator)
 
     def test_creation_filename(self):
-        inst = sg.Script_Generator("hello","world")
-        self.assertEqual(inst.filename, "TEST_world")
+        inst = sg.Script_Generator("hello",".")
+        self.assertEqual(inst.filename, "TEST_hello")
 
 if __name__ == '__main__':
     unittest.main()
