@@ -8,6 +8,7 @@ class Contents_Extractor:
         self.contents = []
         self.filehandle = None
         self.directory = None
+        self.is_class = None
 
     def open_file(self):
         if os.path.isfile(self.fileloc):
@@ -38,12 +39,11 @@ class Contents_Extractor:
         Work out if we are dealing with a class or function script
         """
         first_line = self.get_first_line()
-        is_class = None
         if "function" in first_line:
-            is_class = False
-        if "classdef" in first_line:
-            is_class = True
-        return is_class
+            self.is_class = False
+        else if "classdef" in first_line:
+            self.is_class = True
+        return self.is_class
 
 class Script_Generator:
 
