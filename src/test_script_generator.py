@@ -21,6 +21,30 @@ class ContentExtractor(unittest.TestCase):
         result = inst.open_file()
         self.assertEquals(result, 1)
 
+    def test_exist_substring(self):
+        inst = sg.Contents_Extractor("../test/class.m")
+        result = inst.open_file()
+        inst.read_contents()
+        inst.close_file()
+        result = inst.match_first_item_in_contents("classdef")
+        self.assertEquals(result, 0)
+
+    def test_nonexist_substring(self):
+        inst = sg.Contents_Extractor("../test/class.m")
+        result = inst.open_file()
+        inst.read_contents()
+        inst.close_file()
+        result = inst.match_first_item_in_contents("nonexistence")
+        self.assertEquals(result, None)
+
+    def test_no_start_exist_substring(self):
+        inst = sg.Contents_Extractor("../test/func2.m")
+        result = inst.open_file()
+        inst.read_contents()
+        inst.close_file()
+        result = inst.match_first_item_in_contents("function")
+        self.assertEquals(result, 1)
+
 class ScriptGenerator(unittest.TestCase):
 
     def test_create_object(self):

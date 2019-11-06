@@ -10,6 +10,7 @@ class Contents_Extractor:
         self.directory = None
         self.is_class = None
         self.function_lines = []
+        self.first_line = None
 
     def open_file(self):
         if os.path.isfile(self.fileloc):
@@ -25,25 +26,38 @@ class Contents_Extractor:
     def read_contents(self):
         self.contents = self.filehandle.readlines()
 
-    def get_first_line(self):
-        return self.contents[0]
-
     def get_function_lines(self):
         # Exclude first line incase the script is a function script
-        modified_list = self.contents[1:]
+        modified_list = self.contents[self.first_line:]
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
         self.function_lines = [line for line in modified_list if "function" in line]
         return self.function_lines
 
+    def match_first_item_in_contents(self, substring):
+        """
+        Search the contents instance variable and attempts to match an entry with
+        a substring 
+        """
+        idx = None
+        element = next((s for s in self.contents if substring in s), None)
+        # If we get an element then find its index
+        if element != None:
+            idx = self.contents.index(element)
+        return idx
+
     def get_script_type(self):
         """
         Work out if we are dealing with a class or function script
         """
-        first_line = self.get_first_line()
-        if "function" in first_line:
-            self.is_class = False
-        else if "classdef" in first_line:
+        self.first_line = self.match_first_item_in_contents("classdef")
+        # Check if we found an element with classdef substring
+        if self.first_line == None:
+            self.first_line = self.match_first_item_in_contents("function")
+            # Check if we found an element with function substring
+            if self.first_line != None:
+                self.is_class = False
+        else:
             self.is_class = True
         return self.is_class
 

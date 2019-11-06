@@ -1,3 +1,4 @@
+% Some comments
 function stat(x)
     n = length(x);
     m = sum(x)/n;
