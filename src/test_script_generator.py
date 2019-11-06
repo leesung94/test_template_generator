@@ -3,6 +3,8 @@
 # Author:
 #   Lee Sung
 
+# This test have been written using UNIX paths for files
+
 # Libraries
 import unittest
 

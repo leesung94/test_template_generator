@@ -40,11 +40,13 @@ class Contents_Extractor:
             # Want everything left of the bracket
             firstpass = func.split("(")[0]
             secondpass = ""
-            # Want what is left of the equals sign and space
+            # Want what is right of the equals sign and space
             if ("= " in firstpass):
                 secondpass = firstpass.split("= ")[1]
+            # Want what is right of the equals sign
             elif ("=" in firstpass):
                 secondpass = firstpass.split("=")[1]
+            # If we get here then all we want is everything right of "function "
             else:
                 secondpass = firstpass.split("function ")[1]
             self.function_names.append(secondpass)
@@ -125,7 +127,7 @@ class Script_Generator:
 
     def write_file(self):
         if os.path.isfile(self.fileloc):
-            print "Test Template already exists in: " + self.fileloc
+            print "Error: Test Template already exists in: " + self.fileloc
         else:
             file_handle = open(self.fileloc, "w+") 
             file_handle.write(self.file_contents)
