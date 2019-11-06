@@ -29,26 +29,30 @@ def handle_file(fileloc):
 
         # Get all function declarations except first declaration if script is a 
         # function and not a class
-        inst_cont_extr.get_function_names()
+        if len(inst_cont_extr.get_function_names()) == 0:
 
-        # Generate Start of test script
-        inst_scri_gene = sg.Script_Generator(
-            inst_cont_extr.filename, 
-            inst_cont_extr.directory)
+            # Nothing to generate
+            print "Error : No body functions detected in script"
+            return 1
+        else:
+            # Generate Start of test script
+            inst_scri_gene = sg.Script_Generator(
+                inst_cont_extr.filename, 
+                inst_cont_extr.directory)
 
-        inst_scri_gene.generate_file_head()
+            inst_scri_gene.generate_file_head()
 
-        # Search contents for function declarations
-        #   function templates - one per function
-        for func in inst_cont_extr.function_names:
-            inst_scri_gene.generate_function_block(func)
+            # Search contents for function declarations
+            #   function templates - one per function
+            for func in inst_cont_extr.function_names:
+                inst_scri_gene.generate_function_block(func)
 
-        # Generate end of file
-        inst_scri_gene.generate_file_tail()
+            # Generate end of file
+            inst_scri_gene.generate_file_tail()
 
-        # Create test template in same directory as content script then write and close
-        inst_scri_gene.write_file()
-        return 0
+            # Create test template in same directory as content script then write and close
+            inst_scri_gene.write_file()
+            return 0
     else:
         print "Error: Could not open file. Please ensure path is correct"
         return 1
