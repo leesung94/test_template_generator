@@ -32,12 +32,10 @@ class Contents_Extractor:
         self.contents = self.filehandle.readlines()
 
     def get_function_names(self):
-        # Exclude first line incase the script is a function script
-        modified_list = self.contents[self.first_line:]
         self.function_names = []
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
-        function_lines = [line for line in modified_list if "function" in line]
+        function_lines = [line for line in self.contents if "function" in line]
         for func in function_lines:
             # Want everything left of the bracket
             firstpass = func.split("(")[0]
@@ -90,7 +88,7 @@ class Script_Generator:
         self.fileloc = self.parent_dir + self.filename
 
     def generate_file_head(self):
-        self.file_contents = ("classdef (TestTags = {''}) " + self.classname + " < matlab.unittest.TestCase\n\n")
+        self.file_contents = ("classdef (TestTags = {''}) TEST_" + self.classname + " < matlab.unittest.TestCase\n\n")
         self.file_contents += ("    properties\n\n")
         self.file_contents += ("    end\n\n")
         self.file_contents += ("    methods (TestClassSetup)\n\n")
