@@ -15,7 +15,6 @@ class Contents_Extractor:
         self.directory = None
         self.is_class = None
         self.function_names = []
-        self.first_line = None
 
     def open_file(self):
         if os.path.isfile(self.fileloc):
@@ -69,12 +68,10 @@ class Contents_Extractor:
         """
         Work out if we are dealing with a class or function script
         """
-        self.first_line = self.match_first_item_in_contents("classdef")
         # Check if we found an element with classdef substring
-        if self.first_line == None:
-            self.first_line = self.match_first_item_in_contents("function")
+        if self.match_first_item_in_contents("classdef") == None:
             # Check if we found an element with function substring
-            if self.first_line != None:
+            if self.match_first_item_in_contents("function") != None:
                 self.is_class = False
         else:
             self.is_class = True
