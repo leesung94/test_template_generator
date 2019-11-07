@@ -31,19 +31,50 @@ class Contents_Extractor:
         self.contents = self.filehandle.readlines()
 
     @staticmethod
-    def parse_function_name(str):
+    def parse_function_name(string):
         funcname = ""
         # Want what is right of the equals sign and space
-        if ("= " in str):
-            funcname = str.split("= ")[1]
+        if ("= " in string):
+            funcname = string.split("= ")[1]
         # Want what is right of the equals sign
-        elif ("=" in str):
-            funcname = str.split("=")[1]
+        elif ("=" in string):
+            funcname = string.split("=")[1]
         # If we get here then all we want is everything right of "function "
         else:
-            funcname = str.split("function ")[1]
+            funcname = string.split("function ")[1]
         return funcname
 
+    @staticmethod
+    def parse_function_inputs(string):
+        arg_list = []
+        # Remove the right bracket
+        phase_one = string.split(")")[0]
+        # Check there are inputs
+        if len(phase_one) > 0:
+            if ("," in phase_one):
+                # Split the inputs
+                arg_list = phase_one.split(",")
+            else:
+                # Single input
+                arg_list.append(phase_one)
+        return arg_list
+
+    @staticmethod
+    def parse_function_outputs(string):
+        output_list = []
+        # Check we have outputs
+        if ("=" in string):
+            # Get everything to the right of "function "
+            phase_one = string.split("function ")[1]
+            # Get everything left of "="
+            phase_two = phase_one.split("=")[0]
+            if "[" in phase_two:
+                phase_three = phase_two.split("[")[1]
+                phase_four = phase_three.split("]")[0]
+                output_list = (phase_four.split(","))
+            else:
+                output_list.append(phase_two)
+        return output_list
 
     def get_function_names(self):
         self.function_names = []
@@ -53,13 +84,16 @@ class Contents_Extractor:
         for func in function_lines:
             # Exclude comments and lines of code
             if ("%" not in func and ";" not in func):
-                # TODO REFACTOR AWAY TO WORK OUT NAME, INPUTS, OUTPUTS
-                # Want everything left of the bracket
+                # Parse function name, inputs and outputs
                 first_split = func.split("(")
                 firstpass_left = first_split[0]
                 firstpass_right = first_split[1]
+
                 funcname = Contents_Extractor.parse_function_name(firstpass_left)
-                self.function_names.append(funcname)
+                func_args = Contents_Extractor.parse_function_inputs(firstpass_right)
+                func_outs = Contents_Extractor.parse_function_outputs(firstpass_left)
+                func_details = (funcname, func_args, func_outs)
+                self.function_names.append(func_details)
         return self.function_names
 
     def match_first_item_in_contents(self, substring):
@@ -97,6 +131,23 @@ class Script_Generator:
         self.parent_dir = os.path.join(parent_dir, '')
         self.fileloc = self.parent_dir + self.filename
 
+    @staticmethod
+    def form_function_content(function_details):
+        funcname = function_details[0]
+        input_list = function_details[1]
+        outputs_list = function_details[2]
+        # Create the string for inputs appends a "," between inputs if multiple exist
+        str_inputs = ','.join(str(ele) for ele in input_list)
+        # Create the string for output
+        str_outputs = ""
+        if isinstance(outputs_list, str) == False and len(outputs_list) > 0:
+            str_outputs = "["
+            str_outputs += ','.join(str(ele) for ele in outputs_list)
+            str_outputs += "]"
+        elif isinstance(outputs_list, str) and len(outputs_list) > 0:
+            str_outputs = str(outputs_list)
+        return [funcname, str_inputs, str_outputs, input_list]
+
     def generate_file_head(self):
         self.file_contents = ("classdef (TestTags = {''}) TEST_" + self.classname + " < matlab.unittest.TestCase\n\n")
         self.file_contents += ("    properties\n\n")
@@ -113,18 +164,35 @@ class Script_Generator:
         self.file_contents += ("    end\n\n")
         self.file_contents += ("    methods (Test)\n\n")
 
-    def generate_function_block(self, function_name):
-        self.file_contents += ("        function test_" + function_name + "(testCase)\n\n")
+    def generate_function_block(self, function_details):
+        [funcname, str_inputs, str_outputs, input_list] = Script_Generator.form_function_content(function_details)
+
+        self.file_contents += ("        function test_" + funcname + "(testCase)\n\n")
         self.file_contents += ("        % Test Objective:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
+
         self.file_contents += ("        % Pass Criteria:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
+
+        # Generate input declaration
         self.file_contents += ("        % Test Input Data:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
+        for ele in input_list:
+            self.file_contents += ("        " + ele + ";\n")
+
+        # Generate UUT call
         self.file_contents += ("        % Execute Unit Under Test:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
+
+        # If we expect output then generate the assignment from function call
+        if len(str_outputs) > 0:
+            self.file_contents += ("        " + str_outputs + "= " + funcname + "(")
+        else:
+            self.file_contents += ("        " + funcname + "(")
+        self.file_contents += (str_inputs + ");\n\n")
         self.file_contents += ("        % Verification:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
+
         self.file_contents += ("        end\n\n")
 
     def generate_file_tail(self):
