@@ -32,7 +32,7 @@ def handle_file(fileloc):
         if len(inst_cont_extr.get_function_names()) == 0:
 
             # Nothing to generate
-            print "Error : No body functions detected in script"
+            print("Error : No body functions detected in script")
             return 1
         else:
             # Generate Start of test script
@@ -54,11 +54,11 @@ def handle_file(fileloc):
             inst_scri_gene.write_file()
             return 0
     else:
-        print "Error: Could not open file. Please ensure path is correct"
+        print("Error: Could not open file. Please ensure path is correct")
         return 1
 
 def display_usage():
-    print "Error: Expecting path of the file which will be templated"
+    print("Error: Expecting path of the file which will be templated")
 
 def handle_args():
     """
