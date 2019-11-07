@@ -36,19 +36,21 @@ class Contents_Extractor:
         # Gets all lines in the string array which contain the word "function"
         function_lines = [line for line in self.contents if "function" in line]
         for func in function_lines:
-            # Want everything left of the bracket
-            firstpass = func.split("(")[0]
-            secondpass = ""
-            # Want what is right of the equals sign and space
-            if ("= " in firstpass):
-                secondpass = firstpass.split("= ")[1]
-            # Want what is right of the equals sign
-            elif ("=" in firstpass):
-                secondpass = firstpass.split("=")[1]
-            # If we get here then all we want is everything right of "function "
-            else:
-                secondpass = firstpass.split("function ")[1]
-            self.function_names.append(secondpass)
+            # Exclude comments and lines of code
+            if ("%" not in func and ";" not in func):
+                # Want everything left of the bracket
+                firstpass = func.split("(")[0]
+                secondpass = ""
+                # Want what is right of the equals sign and space
+                if ("= " in firstpass):
+                    secondpass = firstpass.split("= ")[1]
+                # Want what is right of the equals sign
+                elif ("=" in firstpass):
+                    secondpass = firstpass.split("=")[1]
+                # If we get here then all we want is everything right of "function "
+                else:
+                    secondpass = firstpass.split("function ")[1]
+                self.function_names.append(secondpass)
         return self.function_names
 
     def match_first_item_in_contents(self, substring):
@@ -124,7 +126,7 @@ class Script_Generator:
 
     def write_file(self):
         if os.path.isfile(self.fileloc):
-            print "Error: Test Template already exists in: " + self.fileloc
+            print("Error: Test Template already exists in: " + self.fileloc)
         else:
             file_handle = open(self.fileloc, "w+") 
             file_handle.write(self.file_contents)
