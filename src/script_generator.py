@@ -30,6 +30,21 @@ class Contents_Extractor:
     def read_contents(self):
         self.contents = self.filehandle.readlines()
 
+    @staticmethod
+    def parse_function_name(str):
+        funcname = ""
+        # Want what is right of the equals sign and space
+        if ("= " in str):
+            funcname = str.split("= ")[1]
+        # Want what is right of the equals sign
+        elif ("=" in str):
+            funcname = str.split("=")[1]
+        # If we get here then all we want is everything right of "function "
+        else:
+            funcname = str.split("function ")[1]
+        return funcname
+
+
     def get_function_names(self):
         self.function_names = []
         # Witchcraft TM
@@ -38,19 +53,13 @@ class Contents_Extractor:
         for func in function_lines:
             # Exclude comments and lines of code
             if ("%" not in func and ";" not in func):
+                # TODO REFACTOR AWAY TO WORK OUT NAME, INPUTS, OUTPUTS
                 # Want everything left of the bracket
-                firstpass = func.split("(")[0]
-                secondpass = ""
-                # Want what is right of the equals sign and space
-                if ("= " in firstpass):
-                    secondpass = firstpass.split("= ")[1]
-                # Want what is right of the equals sign
-                elif ("=" in firstpass):
-                    secondpass = firstpass.split("=")[1]
-                # If we get here then all we want is everything right of "function "
-                else:
-                    secondpass = firstpass.split("function ")[1]
-                self.function_names.append(secondpass)
+                first_split = func.split("(")
+                firstpass_left = first_split[0]
+                firstpass_right = first_split[1]
+                funcname = Contents_Extractor.parse_function_name(firstpass_left)
+                self.function_names.append(funcname)
         return self.function_names
 
     def match_first_item_in_contents(self, substring):
