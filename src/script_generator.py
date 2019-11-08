@@ -178,10 +178,10 @@ class Script_Generator:
         self.file_contents += ("        % Test Input Data:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
         for ele in input_list:
-            self.file_contents += ("        " + ele + ";\n")
+            self.file_contents += ("        " + ele.strip() + ";\n")
 
         # Generate UUT call
-        self.file_contents += ("        % Execute Unit Under Test:\n")
+        self.file_contents += ("\n        % Execute Unit Under Test:\n")
         self.file_contents += ("        % -------------------------------------------------------------\n\n")
 
         # If we expect output then generate the assignment from function call
