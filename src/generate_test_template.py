@@ -29,7 +29,7 @@ def handle_file(fileloc):
 
         # Get all function declarations except first declaration if script is a 
         # function and not a class
-        if len(inst_cont_extr.get_function_names()) == 0:
+        if len(inst_cont_extr.get_functions()) == 0:
 
             # Nothing to generate
             print("Error : No body functions detected in script")

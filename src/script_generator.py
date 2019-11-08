@@ -76,7 +76,24 @@ class Contents_Extractor:
                 output_list.append(phase_two)
         return output_list
 
-    def get_function_names(self):
+    @staticmethod
+    def recombine_multi_func(index, list, line, next_line):
+        if ("..." in line):
+            index += 1
+            next_line += list[index]
+
+
+    def get_function_lines(self):
+        function_lines = []
+        index = 0
+        while (index < len(self.contents)):
+            line = self.contents[index]
+            if ("function" in line and "%" not in line and ";" not in line):
+                next_line = ""
+                line += 
+            index += 1
+
+    def get_functions(self):
         self.function_names = []
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
