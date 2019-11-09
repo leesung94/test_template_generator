@@ -77,27 +77,40 @@ class Contents_Extractor:
         return output_list
 
     @staticmethod
-    def recombine_multi_func(index, list, line, next_line):
+    def recombine_multi_func(idx, list, line):
+        # Check if the function is multilined
         if ("..." in line):
-            index += 1
-            next_line += list[index]
-
+            idx += 1
+            # Replace the pattern before we append the next line so that we dont 
+            # endlessly loop
+            line = line.replace("...", "")
+            line = line.replace("\n", "")
+            newline = list[idx]
+            newline = newline.strip()
+            # Append the next line
+            line += newline
+            # Repeat until we stop encountering "..."
+            [line, idx] = Contents_Extractor.recombine_multi_func(idx, list, line)
+        # End clause is we dont 
+        return [line, idx]
 
     def get_function_lines(self):
         function_lines = []
-        index = 0
-        while (index < len(self.contents)):
-            line = self.contents[index]
+        idx = 0
+        while (idx < len(self.contents)):
+            line = self.contents[idx]
+            # If line contains "function" that are not comments or code
             if ("function" in line and "%" not in line and ";" not in line):
-                next_line = ""
-                line += 
-            index += 1
+                [line, idx] = Contents_Extractor.recombine_multi_func(idx, self.contents, line)
+                function_lines.append(line)
+            idx += 1
+        return function_lines
 
     def get_functions(self):
         self.function_names = []
         # Witchcraft TM
         # Gets all lines in the string array which contain the word "function"
-        function_lines = [line for line in self.contents if "function" in line]
+        function_lines = self.get_function_lines()
         for func in function_lines:
             # Exclude comments and lines of code
             if ("%" not in func and ";" not in func):
